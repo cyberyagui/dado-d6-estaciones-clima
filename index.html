@@ -9,9 +9,7 @@
   <body>
     <main class="app-shell">
       <section class="panel panel-main" aria-labelledby="app-title">
-        <p class="eyebrow">Dado D6</p>
-        <h1 id="app-title">Estaciones y clima</h1>
-        <p class="intro">Lanza el dado para que la naturaleza decida el rumbo de tu exploración.</p>
+        <h1 id="app-title">Lanzar Dado</h1>
 
         <div class="dice-stage" aria-live="polite">
           <div class="dice-shadow"></div>
@@ -37,10 +35,10 @@
           </div>
         </div>
 
-        <button class="roll-button" id="rollButton" type="button">Lanzar dado</button>
+        <button class="roll-button" id="rollButton" type="button">Lanzar</button>
       </section>
 
-      <section class="panel result-panel" aria-labelledby="result-title">
+      <section class="panel result-panel is-hidden" id="resultPanel" aria-labelledby="result-title">
         <div class="result-card" id="resultCard">
           <p class="eyebrow">Resultado</p>
           <h2 id="result-title">Listo para lanzar</h2>
