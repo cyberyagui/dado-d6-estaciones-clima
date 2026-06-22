@@ -5,35 +5,37 @@ import { Physics } from "@react-three/cannon";
 import * as THREE from "three";
 import { diceFaces, faceRotations, facesById } from "../data/diceFaces.js";
 
+const FACE_OFFSET = 1.285;
+
 const facePlanes = [
   {
     face: facesById.primavera,
-    position: [0, 0, 1.226],
+    position: [0, 0, FACE_OFFSET],
     rotation: [0, 0, 0],
   },
   {
     face: facesById.sequia,
-    position: [0, 0, -1.226],
+    position: [0, 0, -FACE_OFFSET],
     rotation: [0, Math.PI, 0],
   },
   {
     face: facesById.verano,
-    position: [1.226, 0, 0],
+    position: [FACE_OFFSET, 0, 0],
     rotation: [0, Math.PI / 2, 0],
   },
   {
     face: facesById.otono,
-    position: [-1.226, 0, 0],
+    position: [-FACE_OFFSET, 0, 0],
     rotation: [0, -Math.PI / 2, 0],
   },
   {
     face: facesById.invierno,
-    position: [0, 1.226, 0],
+    position: [0, FACE_OFFSET, 0],
     rotation: [-Math.PI / 2, 0, 0],
   },
   {
     face: facesById.lluvia,
-    position: [0, -1.226, 0],
+    position: [0, -FACE_OFFSET, 0],
     rotation: [Math.PI / 2, 0, 0],
   },
 ];
@@ -50,19 +52,17 @@ function DiceFace({ face, position, rotation }) {
 
   return (
     <group position={position} rotation={rotation}>
-      <mesh castShadow receiveShadow>
+      <mesh castShadow receiveShadow renderOrder={2}>
         <planeGeometry args={[1.86, 2.18]} />
         <meshStandardMaterial
           map={texture}
           roughness={0.74}
           metalness={0.02}
+          side={THREE.DoubleSide}
           polygonOffset
-          polygonOffsetFactor={-1}
+          polygonOffsetFactor={-4}
+          polygonOffsetUnits={-4}
         />
-      </mesh>
-      <mesh position={[0, 0, -0.006]}>
-        <planeGeometry args={[2.02, 2.34]} />
-        <meshStandardMaterial color="#d7ad72" roughness={0.82} metalness={0.02} />
       </mesh>
     </group>
   );
