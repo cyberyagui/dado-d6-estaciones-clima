@@ -48,6 +48,8 @@ function DiceFace({ face, position, rotation }) {
     texture.anisotropy = 8;
     texture.minFilter = THREE.LinearMipmapLinearFilter;
     texture.magFilter = THREE.LinearFilter;
+    texture.offset.set(0, 0);
+    texture.repeat.set(1, 1);
   }, [texture]);
 
   return (
@@ -56,9 +58,13 @@ function DiceFace({ face, position, rotation }) {
         <planeGeometry args={[1.86, 2.18]} />
         <meshStandardMaterial
           map={texture}
-          roughness={0.74}
+          color="#c8955f"
+          roughness={0.92}
           metalness={0.02}
+          emissive="#2f1d10"
+          emissiveIntensity={0.035}
           side={THREE.DoubleSide}
+          toneMapped
           polygonOffset
           polygonOffsetFactor={-4}
           polygonOffsetUnits={-4}
@@ -73,6 +79,37 @@ function DiceMesh({ selectedFace, rolling }) {
   const [targetRotation, setTargetRotation] = useState([0.45, -0.62, 0.15]);
   const spinRef = useRef(0);
   const rollClock = useRef(0);
+  const diceTexture = useMemo(() => {
+    const canvas = document.createElement("canvas");
+    canvas.width = 256;
+    canvas.height = 256;
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#c5965c";
+    ctx.fillRect(0, 0, 256, 256);
+
+    for (let i = 0; i < 900; i += 1) {
+      const x = Math.random() * 256;
+      const y = Math.random() * 256;
+      const alpha = 0.04 + Math.random() * 0.1;
+      ctx.fillStyle = Math.random() > 0.5 ? `rgba(78, 45, 18, ${alpha})` : `rgba(255, 231, 177, ${alpha})`;
+      ctx.fillRect(x, y, 1 + Math.random() * 2, 1 + Math.random() * 2);
+    }
+
+    for (let y = 0; y < 256; y += 9) {
+      ctx.strokeStyle = "rgba(93, 55, 24, 0.05)";
+      ctx.beginPath();
+      ctx.moveTo(0, y + Math.sin(y) * 1.5);
+      ctx.lineTo(256, y + Math.cos(y) * 1.5);
+      ctx.stroke();
+    }
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.set(2, 2);
+    return texture;
+  }, []);
 
   useEffect(() => {
     if (!selectedFace) return;
@@ -107,7 +144,14 @@ function DiceMesh({ selectedFace, rolling }) {
   return (
     <group ref={diceRef} position={[0, 0.1, 0]}>
       <RoundedBox args={[2.5, 2.5, 2.5]} radius={0.22} smoothness={8} castShadow receiveShadow>
-        <meshStandardMaterial color="#c99a61" roughness={0.72} metalness={0.03} />
+        <meshStandardMaterial
+          map={diceTexture}
+          color="#b98246"
+          roughness={0.96}
+          metalness={0.01}
+          bumpMap={diceTexture}
+          bumpScale={0.045}
+        />
       </RoundedBox>
       {facePlanes.map((plane) => (
         <DiceFace key={plane.face.id} {...plane} />
@@ -120,9 +164,9 @@ export default function Dice3D({ selectedFace, rolling }) {
   return (
     <div className="dice-canvas" aria-label="Dado 3D de FungiTruco">
       <Canvas shadows camera={{ position: [3.4, 3.1, 5.4], fov: 42 }}>
-        <ambientLight intensity={0.82} />
-        <directionalLight position={[3.5, 4, 5]} intensity={1.8} castShadow />
-        <pointLight position={[-3, 2, 2]} intensity={0.65} color="#ffdca3" />
+        <ambientLight intensity={0.58} />
+        <directionalLight position={[3.5, 4, 5]} intensity={1.12} color="#f3c983" castShadow />
+        <pointLight position={[-3, 2, 2]} intensity={0.38} color="#c78948" />
         <Environment preset="apartment" />
         <Physics gravity={[0, -1, 0]}>
           <DiceMesh selectedFace={selectedFace || diceFaces[0]} rolling={rolling} />
