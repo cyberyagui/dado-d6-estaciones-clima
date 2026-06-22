@@ -70,6 +70,8 @@ button {
 }
 
 .game-panel {
+  position: relative;
+  overflow: hidden;
   min-height: calc(100vh - 40px);
   padding: 32px 16px 24px;
   border: 1px solid rgba(95, 57, 24, 0.18);
@@ -91,6 +93,8 @@ button {
 }
 
 .app-header {
+  position: relative;
+  z-index: 2;
   display: grid;
   gap: 2px;
 }
@@ -115,6 +119,7 @@ button {
 
 .dice-canvas {
   position: relative;
+  z-index: 2;
   width: 100%;
   min-height: 360px;
   display: grid;
@@ -142,6 +147,8 @@ button {
 }
 
 .roll-button {
+  position: relative;
+  z-index: 2;
   width: min(100%, 315px);
   min-height: 64px;
   border: 2px solid #283814;
@@ -167,6 +174,8 @@ button {
 }
 
 .result-card {
+  position: relative;
+  z-index: 2;
   width: 100%;
   min-height: 132px;
   padding: 16px 14px;
@@ -212,6 +221,180 @@ button {
 
 .result-card--empty {
   opacity: 0.86;
+}
+
+.result-effect {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.result-effect span {
+  position: absolute;
+  left: var(--x);
+  opacity: 0;
+  animation-delay: var(--delay);
+  animation-duration: var(--duration);
+  animation-fill-mode: both;
+  animation-timing-function: ease-out;
+}
+
+.effect-petal {
+  top: -18px;
+  width: calc(13px * var(--scale));
+  height: calc(18px * var(--scale));
+  border-radius: 80% 20% 80% 30%;
+  background: radial-gradient(circle at 35% 28%, #fff1f3, #f4a2b3 58%, #cc7189);
+  animation-name: petals-fall;
+}
+
+.effect-leaf {
+  top: -20px;
+  width: calc(16px * var(--scale));
+  height: calc(23px * var(--scale));
+  border-radius: 3px 80% 3px 80%;
+  background: linear-gradient(135deg, #f1b43c, #b65b1d 70%);
+  box-shadow: inset 2px 0 rgba(96, 49, 19, 0.28);
+  animation-name: leaves-fall;
+}
+
+.effect-snow {
+  top: -12px;
+  width: calc(7px * var(--scale));
+  height: calc(7px * var(--scale));
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 9px rgba(255, 255, 255, 0.72);
+  animation-name: snow-fall;
+  animation-timing-function: linear;
+}
+
+.effect-sunray {
+  top: 42%;
+  left: 50%;
+  width: calc(9px * var(--scale));
+  height: 140px;
+  border-radius: 999px;
+  background: linear-gradient(rgba(255, 223, 85, 0.85), rgba(255, 150, 35, 0));
+  transform-origin: 50% 100%;
+  animation-name: sun-rays;
+}
+
+.effect-drop {
+  top: -26px;
+  width: calc(4px * var(--scale));
+  height: calc(30px * var(--scale));
+  border-radius: 999px;
+  background: linear-gradient(rgba(205, 236, 244, 0.92), rgba(62, 128, 151, 0.8));
+  animation-name: rain-fall;
+  animation-timing-function: cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+.effect-dust {
+  bottom: 20%;
+  width: calc(44px * var(--scale));
+  height: calc(18px * var(--scale));
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(150, 84, 41, 0.34), transparent 68%);
+  animation-name: dust-rise;
+}
+
+@keyframes petals-fall {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -24px, 0) rotate(0deg);
+  }
+
+  15% {
+    opacity: 0.95;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(calc((var(--i) - 8) * 7px), 480px, 0) rotate(330deg);
+  }
+}
+
+@keyframes leaves-fall {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -28px, 0) rotate(-30deg);
+  }
+
+  14% {
+    opacity: 0.95;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(calc((var(--i) - 7) * -9px), 500px, 0) rotate(520deg);
+  }
+}
+
+@keyframes snow-fall {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -20px, 0);
+  }
+
+  20% {
+    opacity: 0.96;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(calc((var(--i) - 11) * 4px), 520px, 0);
+  }
+}
+
+@keyframes sun-rays {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(calc(var(--i) * 25deg)) scaleY(0.1);
+  }
+
+  38% {
+    opacity: 0.8;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(calc(var(--i) * 25deg)) scaleY(1);
+  }
+}
+
+@keyframes rain-fall {
+  0% {
+    opacity: 0;
+    transform: translate3d(22px, -30px, 0) rotate(16deg);
+  }
+
+  12% {
+    opacity: 0.9;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(-34px, 520px, 0) rotate(16deg);
+  }
+}
+
+@keyframes dust-rise {
+  0% {
+    opacity: 0;
+    transform: translate3d(-20px, 20px, 0) scale(0.3);
+  }
+
+  30% {
+    opacity: 0.8;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(28px, -190px, 0) scale(1.5);
+  }
 }
 
 @media (max-width: 360px) {
