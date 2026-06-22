@@ -1,78 +1,78 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { ContactShadows, Environment } from "@react-three/drei";
+import { ContactShadows, Environment, RoundedBox, useTexture } from "@react-three/drei";
 import { Physics } from "@react-three/cannon";
 import * as THREE from "three";
-import { diceFaces, faceRotations } from "../data/diceFaces.js";
+import { diceFaces, faceRotations, facesById } from "../data/diceFaces.js";
 
-const materialOrder = [
-  diceFaces[1],
-  diceFaces[2],
-  diceFaces[3],
-  diceFaces[4],
-  diceFaces[0],
-  diceFaces[5],
+const facePlanes = [
+  {
+    face: facesById.primavera,
+    position: [0, 0, 1.226],
+    rotation: [0, 0, 0],
+  },
+  {
+    face: facesById.sequia,
+    position: [0, 0, -1.226],
+    rotation: [0, Math.PI, 0],
+  },
+  {
+    face: facesById.verano,
+    position: [1.226, 0, 0],
+    rotation: [0, Math.PI / 2, 0],
+  },
+  {
+    face: facesById.otono,
+    position: [-1.226, 0, 0],
+    rotation: [0, -Math.PI / 2, 0],
+  },
+  {
+    face: facesById.invierno,
+    position: [0, 1.226, 0],
+    rotation: [-Math.PI / 2, 0, 0],
+  },
+  {
+    face: facesById.lluvia,
+    position: [0, -1.226, 0],
+    rotation: [Math.PI / 2, 0, 0],
+  },
 ];
 
-function createFaceTexture(face) {
-  const canvas = document.createElement("canvas");
-  canvas.width = 512;
-  canvas.height = 512;
-  const ctx = canvas.getContext("2d");
+function DiceFace({ face, position, rotation }) {
+  const texture = useTexture(face.texture);
 
-  const gradient = ctx.createLinearGradient(0, 0, 512, 512);
-  gradient.addColorStop(0, "#fff1c9");
-  gradient.addColorStop(0.45, face.color);
-  gradient.addColorStop(1, "#d4a165");
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, 512, 512);
+  useMemo(() => {
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.anisotropy = 8;
+    texture.minFilter = THREE.LinearMipmapLinearFilter;
+    texture.magFilter = THREE.LinearFilter;
+  }, [texture]);
 
-  ctx.strokeStyle = "rgba(71, 42, 16, 0.52)";
-  ctx.lineWidth = 18;
-  ctx.strokeRect(16, 16, 480, 480);
-  ctx.strokeStyle = "rgba(255, 247, 219, 0.48)";
-  ctx.lineWidth = 6;
-  ctx.strokeRect(36, 36, 440, 440);
-
-  ctx.fillStyle = "rgba(43, 28, 16, 0.9)";
-  ctx.font = "700 54px Georgia";
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-
-  const words = face.label.toUpperCase().split(" ");
-  words.forEach((word, index) => {
-    const offset = (index - (words.length - 1) / 2) * 58;
-    ctx.fillText(word, 256, 256 + offset);
-  });
-
-  ctx.fillStyle = face.accent;
-  ctx.beginPath();
-  ctx.arc(256, 366, 22, 0, Math.PI * 2);
-  ctx.fill();
-
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.colorSpace = THREE.SRGBColorSpace;
-  texture.anisotropy = 4;
-  return texture;
+  return (
+    <group position={position} rotation={rotation}>
+      <mesh castShadow receiveShadow>
+        <planeGeometry args={[1.86, 2.18]} />
+        <meshStandardMaterial
+          map={texture}
+          roughness={0.74}
+          metalness={0.02}
+          polygonOffset
+          polygonOffsetFactor={-1}
+        />
+      </mesh>
+      <mesh position={[0, 0, -0.006]}>
+        <planeGeometry args={[2.02, 2.34]} />
+        <meshStandardMaterial color="#d7ad72" roughness={0.82} metalness={0.02} />
+      </mesh>
+    </group>
+  );
 }
 
 function DiceMesh({ selectedFace, rolling }) {
   const diceRef = useRef();
   const [targetRotation, setTargetRotation] = useState([0.45, -0.62, 0.15]);
   const spinRef = useRef(0);
-
-  const materials = useMemo(
-    () =>
-      materialOrder.map((face) => {
-        const texture = createFaceTexture(face);
-        return new THREE.MeshStandardMaterial({
-          map: texture,
-          roughness: 0.62,
-          metalness: 0.02,
-        });
-      }),
-    []
-  );
+  const rollClock = useRef(0);
 
   useEffect(() => {
     if (!selectedFace) return;
@@ -89,22 +89,29 @@ function DiceMesh({ selectedFace, rolling }) {
     if (!diceRef.current) return;
 
     if (rolling) {
-      diceRef.current.rotation.x += delta * 7.5;
-      diceRef.current.rotation.y += delta * 9;
-      diceRef.current.rotation.z += delta * 5.5;
+      rollClock.current += delta;
+      diceRef.current.position.y = 0.1 + Math.abs(Math.sin(rollClock.current * 8)) * 0.42;
+      diceRef.current.rotation.x += delta * 8.2;
+      diceRef.current.rotation.y += delta * 10.4;
+      diceRef.current.rotation.z += delta * 6.1;
       return;
     }
 
-    diceRef.current.rotation.x = THREE.MathUtils.lerp(diceRef.current.rotation.x, targetRotation[0], 0.09);
-    diceRef.current.rotation.y = THREE.MathUtils.lerp(diceRef.current.rotation.y, targetRotation[1], 0.09);
-    diceRef.current.rotation.z = THREE.MathUtils.lerp(diceRef.current.rotation.z, targetRotation[2], 0.09);
+    rollClock.current = 0;
+    diceRef.current.position.y = THREE.MathUtils.lerp(diceRef.current.position.y, 0.1, 0.14);
+    diceRef.current.rotation.x = THREE.MathUtils.lerp(diceRef.current.rotation.x, targetRotation[0], 0.1);
+    diceRef.current.rotation.y = THREE.MathUtils.lerp(diceRef.current.rotation.y, targetRotation[1], 0.1);
+    diceRef.current.rotation.z = THREE.MathUtils.lerp(diceRef.current.rotation.z, targetRotation[2], 0.1);
   });
 
   return (
     <group ref={diceRef} position={[0, 0.1, 0]}>
-      <mesh castShadow receiveShadow material={materials}>
-        <boxGeometry args={[2.4, 2.4, 2.4]} />
-      </mesh>
+      <RoundedBox args={[2.5, 2.5, 2.5]} radius={0.22} smoothness={8} castShadow receiveShadow>
+        <meshStandardMaterial color="#c99a61" roughness={0.72} metalness={0.03} />
+      </RoundedBox>
+      {facePlanes.map((plane) => (
+        <DiceFace key={plane.face.id} {...plane} />
+      ))}
     </group>
   );
 }
@@ -113,13 +120,14 @@ export default function Dice3D({ selectedFace, rolling }) {
   return (
     <div className="dice-canvas" aria-label="Dado 3D de FungiTruco">
       <Canvas shadows camera={{ position: [3.4, 3.1, 5.4], fov: 42 }}>
-        <ambientLight intensity={0.8} />
-        <directionalLight position={[3.5, 4, 5]} intensity={1.7} castShadow />
+        <ambientLight intensity={0.82} />
+        <directionalLight position={[3.5, 4, 5]} intensity={1.8} castShadow />
+        <pointLight position={[-3, 2, 2]} intensity={0.65} color="#ffdca3" />
         <Environment preset="apartment" />
         <Physics gravity={[0, -1, 0]}>
-          <DiceMesh selectedFace={selectedFace} rolling={rolling} />
+          <DiceMesh selectedFace={selectedFace || diceFaces[0]} rolling={rolling} />
         </Physics>
-        <ContactShadows position={[0, -1.45, 0]} opacity={0.42} scale={7} blur={2.8} far={4} />
+        <ContactShadows position={[0, -1.48, 0]} opacity={0.44} scale={7} blur={2.8} far={4} />
       </Canvas>
     </div>
   );
