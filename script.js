@@ -1,5 +1,6 @@
 const dice = document.querySelector("#dice");
 const rollButton = document.querySelector("#rollButton");
+const resultPanel = document.querySelector("#resultPanel");
 const resultCard = document.querySelector("#resultCard");
 const resultTitle = document.querySelector("#result-title");
 const resultVisual = document.querySelector("#resultVisual");
@@ -74,6 +75,7 @@ function chooseFace() {
 }
 
 function setResult(face) {
+  resultPanel.classList.remove("is-hidden");
   resultCard.className = `result-card theme-${face.id}`;
   resultTitle.textContent = face.name;
   resultVisual.src = face.image;
@@ -96,7 +98,7 @@ function rollDice() {
     dice.style.transform = `${face.transform} rotateZ(${extraTurns * 360}deg)`;
     setResult(face);
     rollButton.disabled = false;
-    rollButton.textContent = "Lanzar dado";
+    rollButton.textContent = "Lanzar";
   }, 1100);
 }
 
