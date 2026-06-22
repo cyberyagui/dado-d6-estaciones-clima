@@ -24,6 +24,7 @@ body {
   color: var(--ink);
   font-family: Georgia, "Times New Roman", serif;
   background:
+    radial-gradient(circle at 65% 18%, rgba(98, 58, 25, 0.16), transparent 10rem),
     radial-gradient(circle at 50% 40%, rgba(255, 236, 181, 0.58), transparent 16rem),
     radial-gradient(circle at 14% 18%, rgba(121, 70, 28, 0.2), transparent 8rem),
     radial-gradient(circle at 88% 12%, rgba(105, 57, 22, 0.18), transparent 9rem),
@@ -40,14 +41,16 @@ body::after {
 }
 
 body::before {
-  opacity: 0.56;
+  opacity: 0.7;
   background-image:
+    repeating-linear-gradient(8deg, rgba(102, 65, 30, 0.045) 0 1px, transparent 1px 7px),
+    repeating-linear-gradient(96deg, rgba(255, 239, 190, 0.035) 0 1px, transparent 1px 9px),
     radial-gradient(circle at 9% 12%, transparent 0 1px, rgba(72, 41, 18, 0.13) 2px, transparent 3px),
     radial-gradient(circle at 78% 24%, rgba(87, 52, 23, 0.11), transparent 7rem),
     radial-gradient(circle at 50% 102%, rgba(83, 43, 16, 0.25), transparent 12rem),
     linear-gradient(90deg, rgba(82, 48, 19, 0.08) 1px, transparent 1px),
     linear-gradient(rgba(82, 48, 19, 0.07) 1px, transparent 1px);
-  background-size: 18px 18px, auto, auto, 42px 42px, 42px 42px;
+  background-size: auto, auto, 18px 18px, auto, auto, 42px 42px, 42px 42px;
 }
 
 body::after {
@@ -82,6 +85,8 @@ button {
   justify-items: center;
   text-align: center;
   background:
+    repeating-linear-gradient(7deg, rgba(96, 56, 21, 0.045) 0 1px, transparent 1px 10px),
+    repeating-linear-gradient(96deg, rgba(255, 243, 206, 0.035) 0 1px, transparent 1px 13px),
     radial-gradient(circle at 50% 42%, rgba(255, 241, 199, 0.84), transparent 18rem),
     radial-gradient(circle at 12% 9%, rgba(114, 66, 27, 0.16), transparent 5rem),
     radial-gradient(circle at 88% 92%, rgba(98, 52, 19, 0.2), transparent 7rem),
@@ -97,6 +102,7 @@ button {
   z-index: 2;
   display: grid;
   gap: 2px;
+  min-height: 22px;
 }
 
 .app-header p,
@@ -107,14 +113,6 @@ button {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-}
-
-.app-header h1 {
-  margin: 0;
-  color: var(--ink);
-  font-size: clamp(2rem, 10vw, 3.05rem);
-  line-height: 1;
-  text-shadow: 0 2px 0 rgba(255, 244, 210, 0.65);
 }
 
 .dice-canvas {
