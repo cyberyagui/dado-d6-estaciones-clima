@@ -1,7 +1,13 @@
-# Dado D6 - Estaciones y clima
+# FungiTruco - Dado D6
 
-Aplicación web móvil con un dado 3D de seis caras para un juego de estaciones y clima.
+Aplicación web móvil hecha con React, Vite y React Three Fiber para tirar un dado D6 personalizado de FungiTruco.
 
 ## Cómo usar
 
-Abre `index.html` o publica el repositorio con GitHub Pages desde la rama `main`.
+```bash
+npm install
+npm run dev
+npm run build
+```
+
+El build de producción se genera en `docs/` para publicarse con GitHub Pages.
