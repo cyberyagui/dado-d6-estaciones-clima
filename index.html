@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dado D6 - Estaciones y clima</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="panel panel-main" aria-labelledby="app-title">
+        <p class="eyebrow">Dado D6</p>
+        <h1 id="app-title">Estaciones y clima</h1>
+        <p class="intro">Lanza el dado para que la naturaleza decida el rumbo de tu exploración.</p>
+
+        <div class="dice-stage" aria-live="polite">
+          <div class="dice-shadow"></div>
+          <div class="dice" id="dice" aria-label="Dado de seis caras">
+            <div class="face face-1">
+              <img class="face-image" src="assets/dado-primavera.png" alt="Primavera" />
+            </div>
+            <div class="face face-2">
+              <img class="face-image" src="assets/dado-verano.png" alt="Verano" />
+            </div>
+            <div class="face face-3">
+              <img class="face-image" src="assets/dado-otono.png" alt="Otoño" />
+            </div>
+            <div class="face face-4">
+              <img class="face-image" src="assets/dado-invierno.png" alt="Invierno" />
+            </div>
+            <div class="face face-5">
+              <img class="face-image" src="assets/dado-temporada-de-lluvias.png" alt="Temporada de lluvias" />
+            </div>
+            <div class="face face-6">
+              <img class="face-image" src="assets/dado-temporada-de-sequia.png" alt="Temporada de sequía" />
+            </div>
+          </div>
+        </div>
+
+        <button class="roll-button" id="rollButton" type="button">Lanzar dado</button>
+      </section>
+
+      <section class="panel result-panel" aria-labelledby="result-title">
+        <div class="result-card" id="resultCard">
+          <p class="eyebrow">Resultado</p>
+          <h2 id="result-title">Listo para lanzar</h2>
+          <img class="result-visual" id="resultVisual" src="assets/dado-primavera.png" alt="" aria-hidden="true" />
+          <p class="result-kind" id="resultKind">Presiona el botón para descubrir una cara.</p>
+          <p class="result-text" id="resultText">Cada resultado trae una recompensa o una penalización para tu juego.</p>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
