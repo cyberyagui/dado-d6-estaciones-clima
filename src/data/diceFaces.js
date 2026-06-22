@@ -1,3 +1,5 @@
+const asset = (fileName) => `${import.meta.env.BASE_URL}assets/${fileName}`;
+
 export const diceFaces = [
   {
     id: "primavera",
@@ -7,7 +9,7 @@ export const diceFaces = [
     description: "Recompensa leve",
     color: "#d9899b",
     accent: "#5f7f35",
-    texture: "/assets/dado-primavera.png",
+    texture: asset("dado-primavera.png"),
   },
   {
     id: "verano",
@@ -17,7 +19,7 @@ export const diceFaces = [
     description: "Penalización leve",
     color: "#e3a52d",
     accent: "#8d5a16",
-    texture: "/assets/dado-verano.png",
+    texture: asset("dado-verano.png"),
   },
   {
     id: "otono",
@@ -27,7 +29,7 @@ export const diceFaces = [
     description: "Recompensa leve",
     color: "#bc6725",
     accent: "#7a3b17",
-    texture: "/assets/dado-otono.png",
+    texture: asset("dado-otono.png"),
   },
   {
     id: "invierno",
@@ -37,7 +39,7 @@ export const diceFaces = [
     description: "Penalización leve",
     color: "#7da0ab",
     accent: "#415f6d",
-    texture: "/assets/dado-invierno.png",
+    texture: asset("dado-invierno.png"),
   },
   {
     id: "lluvia",
@@ -47,7 +49,7 @@ export const diceFaces = [
     description: "Recompensa fuerte",
     color: "#4f8898",
     accent: "#275a68",
-    texture: "/assets/dado-temporada-de-lluvias.png",
+    texture: asset("dado-temporada-de-lluvias.png"),
   },
   {
     id: "sequia",
@@ -57,7 +59,7 @@ export const diceFaces = [
     description: "Penalización fuerte",
     color: "#a45134",
     accent: "#6d2d23",
-    texture: "/assets/dado-temporada-de-sequia.png",
+    texture: asset("dado-temporada-de-sequia.png"),
   },
 ];
 
@@ -69,3 +71,5 @@ export const faceRotations = {
   lluvia: [-Math.PI / 2, 0, 0],
   sequia: [0, Math.PI, 0],
 };
+
+export const facesById = Object.fromEntries(diceFaces.map((face) => [face.id, face]));
