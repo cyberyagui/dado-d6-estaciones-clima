@@ -44,7 +44,6 @@ export default function App() {
 
         <header className="app-header">
           <p>FungiTruco</p>
-          <h1>Dado D6</h1>
         </header>
 
         <Dice3D selectedFace={pendingFace || selectedFace} rolling={rolling} />
